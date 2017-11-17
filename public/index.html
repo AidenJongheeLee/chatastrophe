@@ -12,12 +12,12 @@
 		<script>
 		  // Initialize Firebase
 		  var config = {
-		    apiKey: "AIzaSyAZrbUDLze8TMMPgLSi5SJwxEZ5-83FBPg",
+		    apiKey: window.apiKey,
 		    authDomain: "chatastrophe-f43a8.firebaseapp.com",
 		    databaseURL: "https://chatastrophe-f43a8.firebaseio.com",
 		    projectId: "chatastrophe-f43a8",
 		    storageBucket: "chatastrophe-f43a8.appspot.com",
-		    messagingSenderId: "676276786469"
+		    messagingSenderId: window.messagingSenderId
 		  };
 		  window.firebase = firebase;
 		  firebase.initializeApp(config);
@@ -25,7 +25,7 @@
 		<script>
 			if ('serviceWorker' in navigator) {
 				window.addEventListener('load', function() {
-					navigator.serviceWorker.register('sw.js').then(function (registration) {
+					navigator.serviceWorker.register('firebase-messaging-sw.js').then(function (registration) {
 						console.log('Registered!');
 					}, function(err) {
 						console.log('serviceWorker registration is failed: ', err);
