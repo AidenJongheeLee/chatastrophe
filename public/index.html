@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang='en'>
+	<head>
+		<link rel='shortcut icon' href='assets/favicon.ico' type='image/x-icon'>
+		<meta name='viewport' content="width=device-width, initial-scale=1">
+		<meta charset='utf-8'>
+	</head>
+	<body>
+		<div id='root'></div>
+		<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
+		<script src='/secrets.js'></script>
+		<script>
+		  // Initialize Firebase
+		  var config = {
+		    apiKey: "AIzaSyAZrbUDLze8TMMPgLSi5SJwxEZ5-83FBPg",
+		    authDomain: "chatastrophe-f43a8.firebaseapp.com",
+		    databaseURL: "https://chatastrophe-f43a8.firebaseio.com",
+		    projectId: "chatastrophe-f43a8",
+		    storageBucket: "chatastrophe-f43a8.appspot.com",
+		    messagingSenderId: "676276786469"
+		  };
+		  window.firebase = firebase;
+		  firebase.initializeApp(config);
+		</script>
+	</body>
+</html>
