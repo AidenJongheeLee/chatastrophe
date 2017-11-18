@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Route, withRouter } from 'react-router-dom';
+import NotificationResource from '../resources/NotificationResource';
 import LoginContainer from './LoginContainer';
 import ChatContainer from './ChatContainer';
 import UserContainer from './UserContainer';
@@ -22,6 +23,7 @@ class App extends Component {
 				this.setState({ messagesLoaded: true });
 			}
 		});
+		this.notifications = new NotificationResource(firebase.messaging());
 	}
 
 	onMessage = snapshot => {
@@ -60,12 +62,12 @@ class App extends Component {
 				/>
 				<Route
 					path="/users/:id"
-					render={({ history, match }) => (
+					render={({ history, match }) =>
 						<UserContainer
 							messages={this.state.messages}
 							messagesLoaded={this.state.messagesLoaded}
 							userID={match.params.id}
-						/>)}
+						/>}
 				/>
 			</div>
 		);
