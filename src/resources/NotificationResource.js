@@ -1,6 +1,7 @@
 export default class NotificationResource {
 	allTokens = [];
 	tokensLoaded = false;
+	user = null;
 
 	constructor(messaging, database) {
 		this.database = database;
@@ -21,7 +22,7 @@ export default class NotificationResource {
 		this.database.ref('/fcmTokens').on('value', snapshot => {
 			this.allTokens = snapshot.val();
 			this.tokensLoaded = true;
-		});
+		});	
 	}
 
 	setupTokenRefresh() {
@@ -31,15 +32,16 @@ export default class NotificationResource {
 	}
 
 	saveTokenToServer() {
-		//get token
 		this.messaging.getToken().then(res => {
-			//look for existing token
 			if (this.tokensLoaded) {
 				const existingToken = this.findingExistingToken(res);
 				if (existingToken) {
-					//if it exists, replace
+					firebase.database().ref(`/fcmTokens/${existingToken}`).set({
+						token: res,
+						user_id: this.user.uid
+					});
 				} else {
-					//otherwise, create a new one
+					this.registerToken(res);
 				}
 			}
 		});
@@ -53,5 +55,17 @@ export default class NotificationResource {
 			}
 		}
 		return false;
+	}
+
+	registerToken(token) {
+		firebase.database().ref('fcmTokens/').push({
+			token: token,
+			user_id: this.user.uid
+		});
+	}
+
+	changeUser(user) {
+		this.user = user;
+		this.saveTokenToServer();
 	}
 }

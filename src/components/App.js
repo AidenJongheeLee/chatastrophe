@@ -10,9 +10,15 @@ class App extends Component {
 	state = { user: null, messages: [], messagesLoaded: false };
 
 	componentDidMount() {
+		this.notifications = new NotificationResource(
+			firebase.messaging(),
+			firebase.database()
+		);
 		firebase.auth().onAuthStateChanged(user => {
 			if (user) {
 				this.setState({ user });
+				//this.listenForMessage(); //can't find until page 166
+				this.notifications.changeUser(user);
 			} else {
 				this.props.history.push('/login');
 			}
@@ -23,10 +29,6 @@ class App extends Component {
 				this.setState({ messagesLoaded: true });
 			}
 		});
-		this.notifications = new NotificationResource(
-			firebase.messaging(),
-			firebase.database()
-		);
 	}
 
 	onMessage = snapshot => {
