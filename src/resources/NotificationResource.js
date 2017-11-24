@@ -10,10 +10,10 @@ export default class NotificationResource {
 			this.messaging
 				.requestPermission()
 				.then(res => {
-					console.log('permission granted');
+					console.log('Permission granted!');
 				})
 				.catch(err => {
-					console.log('no access', err);
+					console.log('no access ', err);
 				});
 		} catch (err) {
 			console.log('No notification support', err);
@@ -22,7 +22,7 @@ export default class NotificationResource {
 		this.database.ref('/fcmTokens').on('value', snapshot => {
 			this.allTokens = snapshot.val();
 			this.tokensLoaded = true;
-		});	
+		});
 	}
 
 	setupTokenRefresh() {
@@ -32,14 +32,16 @@ export default class NotificationResource {
 	}
 
 	saveTokenToServer() {
+		console.log('tokensLoaded: ', this.tokensLoaded)
 		this.messaging.getToken().then(res => {
 			if (this.tokensLoaded) {
-				const existingToken = this.findingExistingToken(res);
+				const existingToken = this.findExistingToken(res);
 				if (existingToken) {
-					firebase.database().ref(`/fcmTokens/${existingToken}`).set({
-						token: res,
-						user_id: this.user.uid
-					});
+					console.log(existingToken);
+					firebase
+						.database()
+						.ref(`/fcmTokens/${existingToken}`)
+						.set({ token: res, user_id: this.user.uid });
 				} else {
 					this.registerToken(res);
 				}
@@ -47,7 +49,14 @@ export default class NotificationResource {
 		});
 	}
 
-	findingExistingToken(tokenToSave) {
+	registerToken(token) {
+		firebase.database().ref('fcmTokens/').push({
+			token: token,
+			user_id: this.user.uid
+		});
+	}
+
+	findExistingToken(tokenToSave) {
 		for (let tokenKey in this.allTokens) {
 			const token = this.allTokens[tokenKey].token;
 			if (token === tokenToSave) {
@@ -55,13 +64,6 @@ export default class NotificationResource {
 			}
 		}
 		return false;
-	}
-
-	registerToken(token) {
-		firebase.database().ref('fcmTokens/').push({
-			token: token,
-			user_id: this.user.uid
-		});
 	}
 
 	changeUser(user) {
