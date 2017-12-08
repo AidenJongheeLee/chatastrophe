@@ -6,7 +6,7 @@
   "scripts": {
     "build": "node scripts/copy_assets.js && node_modules/.bin/webpack --config webpack.config.prod.js",
     "start": "node_modules/.bin/webpack-dev-server",
-    "deploy": "npm run build && firebase deploy"
+    "deploy": "npm run build && node scripts/assess.js && firebase deploy"
   },
   "dependencies": {
     "babel-core": "^6.26.0",
@@ -29,8 +29,8 @@
   },
   "devDependencies": {
     "babel-preset-stage-2": "^6.24.1",
-    "eslint": "^4.11.0",
-    "eslint-config-google": "^0.9.1",
-    "prettier-eslint": "^8.2.1"
+    "lighthouse": "^2.6.0",
+    "prettier-eslint": "^8.2.1",
+    "serve": "^6.4.1"
   }
 }
